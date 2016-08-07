@@ -1,5 +1,6 @@
 package dawg
 
+// status ok
 const (
 	// constRoot - Root index
 	constRoot          uint32 = 0
