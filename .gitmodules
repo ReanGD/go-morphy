@@ -1,0 +1,3 @@
+[submodule "DAWG-Python"]
+	path = DAWG-Python
+	url = https://github.com/pytries/DAWG-Python.git
