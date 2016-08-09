@@ -41,7 +41,7 @@ func (c *Completer) next() bool {
 
 		if childLabel != 0 {
 			// Follows a transition to the first child.
-			ok, index = c.follow(childLabel, index)
+			index, ok = c.follow(childLabel, index)
 			if !ok {
 				return false
 			}
@@ -62,7 +62,7 @@ func (c *Completer) next() bool {
 				index = c.indexStack[len(c.indexStack)-1]
 				if siblingLabel != 0 {
 					// Follows a transition to the next sibling.
-					ok, index = c.follow(siblingLabel, index)
+					index, ok = c.follow(siblingLabel, index)
 					if !ok {
 						return false
 					}
@@ -74,14 +74,14 @@ func (c *Completer) next() bool {
 	return c.findTerminal(index)
 }
 
-func (c *Completer) follow(label uint8, index uint32) (bool, uint32) {
-	ok, nextIndex := c.dic.followChar(uint32(label), index)
+func (c *Completer) follow(label uint8, index uint32) (uint32, bool) {
+	nextIndex, ok := c.dic.followChar(uint32(label), index)
 	if ok {
 		c.key = append(c.key, label)
 		c.indexStack = append(c.indexStack, nextIndex)
 	}
 
-	return ok, nextIndex
+	return nextIndex, ok
 }
 
 func (c *Completer) findTerminal(index uint32) bool {
@@ -89,7 +89,7 @@ func (c *Completer) findTerminal(index uint32) bool {
 	for !c.dic.hasValue(index) {
 		label := c.guide.child(index)
 
-		ok, index = c.dic.followChar(uint32(label), index)
+		index, ok = c.dic.followChar(uint32(label), index)
 		if !ok {
 			return false
 		}

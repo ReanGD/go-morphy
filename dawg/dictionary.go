@@ -37,7 +37,7 @@ func (d *Dictionary) Read(buf io.Reader) error {
 
 // Contains - Exact matching.
 func (d *Dictionary) Contains(key []byte) bool {
-	ok, index := d.followBytes(key, constRoot)
+	index, ok := d.followBytes(key, constRoot)
 	if !ok {
 		return false
 	}
@@ -45,41 +45,33 @@ func (d *Dictionary) Contains(key []byte) bool {
 }
 
 // Find - Exact matching (returns value)
-func (d *Dictionary) Find(key []byte) (bool, uint32) {
-	ok, index := d.followBytes(key, constRoot)
-	if !ok {
-		return false, 0
+func (d *Dictionary) Find(key []byte) (uint32, bool) {
+	index, ok := d.followBytes(key, constRoot)
+	if !ok || !d.hasValue(index) {
+		return 0, false
 	}
 
-	if !d.hasValue(index) {
-		return false, 0
-	}
-
-	return true, d.value(index)
+	return d.value(index), true
 }
 
 // followChar - Follows a transition.
-func (d *Dictionary) followChar(label uint32, index uint32) (bool, uint32) {
+func (d *Dictionary) followChar(label uint32, index uint32) (uint32, bool) {
 	offset := getOffset(d.units[index])
 	nextIndex := (index ^ offset ^ label) & constPrecisionMask
-	if getLabel(d.units[nextIndex]) != label {
-		return false, 0
-	}
-
-	return true, nextIndex
+	return nextIndex, getLabel(d.units[nextIndex]) == label
 }
 
 // followBytes - Follows transitions.
-func (d *Dictionary) followBytes(s []byte, index uint32) (bool, uint32) {
+func (d *Dictionary) followBytes(s []byte, index uint32) (uint32, bool) {
 	var ok bool
 	for _, ch := range s {
-		ok, index = d.followChar(uint32(ch), index)
+		index, ok = d.followChar(uint32(ch), index)
 		if !ok {
-			return ok, index
+			return index, ok
 		}
 	}
 
-	return true, index
+	return index, true
 }
 
 // NewDictionary - constructor for Dictionary

@@ -49,7 +49,7 @@ func (d *DAWG) similarKeys(currentPrefix string, key string, index uint32, repla
 		ReplaceChar, ok := replaceChars[bStep]
 
 		if ok {
-			ok, nextIndex := d.dct.followBytes([]byte(string(ReplaceChar)), index)
+			nextIndex, ok := d.dct.followBytes([]byte(string(ReplaceChar)), index)
 			if ok {
 				prefix := currentPrefix + key[startPos:curPos] + string(ReplaceChar)
 				extraKeys := d.similarKeys(prefix, key, nextIndex, replaceChars)
@@ -57,7 +57,7 @@ func (d *DAWG) similarKeys(currentPrefix string, key string, index uint32, repla
 			}
 		}
 
-		ok, index = d.dct.followBytes([]byte(string(bStep)), index)
+		index, ok = d.dct.followBytes([]byte(string(bStep)), index)
 		if !ok {
 			exitByBreak = true
 			break
@@ -87,7 +87,7 @@ func (d *DAWG) Prefixes(key string) []string {
 	index := constRoot
 
 	for pos, ch := range []byte(key) {
-		ok, index = d.dct.followChar(uint32(ch), index)
+		index, ok = d.dct.followChar(uint32(ch), index)
 		if !ok {
 			break
 		}
