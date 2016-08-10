@@ -2,6 +2,7 @@ package dawg
 
 // status ok
 import (
+	"bytes"
 	"os"
 	"testing"
 	"unicode/utf8"
@@ -30,6 +31,10 @@ func TestDictionary(t *testing.T) {
 			}
 		})
 
+		Convey("Not contains", func() {
+			So(dict.Contains([]byte("ABCz")), ShouldBeFalse)
+		})
+
 		Convey("Find", func() {
 			for _, word := range words {
 				index, ok := dict.Find([]byte(word))
@@ -38,5 +43,15 @@ func TestDictionary(t *testing.T) {
 				}
 			}
 		})
+	})
+}
+
+// TestGuide ...
+func TestGuide(t *testing.T) {
+	Convey("Read error", t, func() {
+		guide := Guide{}
+		err := guide.read(bytes.NewReader([]byte{}))
+		So(err, ShouldNotBeNil)
+		So(err.Error(), ShouldEqual, "EOF")
 	})
 }

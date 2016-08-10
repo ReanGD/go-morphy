@@ -88,6 +88,16 @@ func TestBytesDAWG(t *testing.T) {
 			So(dawg.Prefixes("bar"), ShouldResemble, []string{"bar"})
 			So(dawg.Prefixes("x"), ShouldResemble, []string{})
 		})
+
+		Convey("Decode error", func() {
+			f := func() { dawg.decode([]byte("YWJjZA=====")) }
+			So(f, ShouldPanic)
+		})
+
+		Convey("Not found separator", func() {
+			f := func() { dawg.stringBySeparator([]byte{}) }
+			So(f, ShouldPanicWith, "Separator is not in array")
+		})
 	})
 }
 
@@ -151,6 +161,11 @@ func TestRecordDAWG(t *testing.T) {
 			So(dawg.Prefixes("foobarz"), ShouldResemble, []string{"foo", "foobar"})
 			So(dawg.Prefixes("x"), ShouldResemble, []string{})
 			So(dawg.Prefixes("bar"), ShouldResemble, []string{"bar"})
+		})
+
+		Convey("bytesToUints16 error", func() {
+			f := func() { dawg.bytesToUints16([]byte{}) }
+			So(f, ShouldPanicWith, "source len error")
 		})
 	})
 }

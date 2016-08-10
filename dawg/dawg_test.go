@@ -45,6 +45,18 @@ func testWords100k() []string {
 	return result
 }
 
+// TestDAWG ...
+func TestDAWG(t *testing.T) {
+	Convey("Suite setup", t, func() {
+		Convey("Invalid file path", func() {
+			dawgErr := NewDAWG()
+			err := dawgErr.Load("err.dawg")
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "open err.dawg: no such file or directory")
+		})
+	})
+}
+
 // TestCompletionDAWG ...
 func TestCompletionDAWG(t *testing.T) {
 	Convey("Suite setup", t, func() {
@@ -105,6 +117,13 @@ func TestCompletionDAWG(t *testing.T) {
 			So(dawg.Prefixes("x"), ShouldResemble, []string{})
 			So(dawg.Prefixes("bar"), ShouldResemble, []string{"bar"})
 		})
+
+		Convey("Invalid file path", func() {
+			dawgErr := NewCompletionDAWG()
+			err := dawgErr.Load("err.dawg")
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "open err.dawg: no such file or directory")
+		})
 	})
 }
 
@@ -162,6 +181,20 @@ func TestIntCompletionDawg(t *testing.T) {
 
 		Convey("completion items", func() {
 			So(dawg.Items(""), ShouldResemble, payload)
+		})
+
+		Convey("completion items with prefix", func() {
+			So(dawg.Items("foo"), ShouldResemble,
+				[]StringUint32{StringUint32{"foo", 1}, StringUint32{"foobar", 3}})
+
+			So(dawg.Items("x"), ShouldResemble, []StringUint32{})
+		})
+
+		Convey("Invalid file path", func() {
+			dawgErr := NewIntCompletionDAWG()
+			err := dawgErr.Load("err.dawg")
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "open err.dawg: no such file or directory")
 		})
 	})
 }
