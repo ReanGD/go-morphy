@@ -1,9 +1,23 @@
 go-morph
 ===
 
-Порт pymorphy2 на Golang.
+Порт морфологического анализатора [pymorphy2](https://github.com/kmike/pymorphy2) ([v0.8](https://github.com/kmike/pymorphy2/releases/tag/0.8)) и его составной части [DAWG-Python](https://github.com/pytries/DAWG-Python) ([v0.7.2](https://github.com/pytries/DAWG-Python/releases/tag/0.7.2)) на Golang.
 
-Для прохождения тестов нужно клонировать проект вместе с submodule (в них хранятся проекты pymorphy2 тех версий с которых производился порт):
+Тесты и бенчмарки
+---
+Для прохождения требуются тестовые данные из оригинального pymorphy2, поэтому нужно клонировать проект вместе с submodule:
 ```
 git clone --recursive https://github.com/ReanGD/go-morph.git
+```
+
+- Запуск тестов:
+```
+cd go-morph
+go test -v ./...
+```
+
+- Запуск бенчмарков:
+```
+cd go-morph/benchmarks
+go test -bench=BenchmarkDAWG
 ```
