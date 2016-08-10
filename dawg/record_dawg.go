@@ -2,7 +2,6 @@ package dawg
 
 // status ok
 import (
-	"bytes"
 	"encoding/binary"
 	"unicode/utf8"
 )
@@ -39,15 +38,22 @@ func (d *RecordDAWG) Get(key string) ([][]uint16, bool) {
 	return res, len(res) != 0
 }
 
+func (d *RecordDAWG) bytesToUints16(src []byte) []uint16 {
+	if len(src) != int(d.fmt)*2 {
+		panic("source len error")
+	}
+	res := make([]uint16, d.fmt)
+	for i := range res {
+		res[i] = d.order.Uint16(src[2*i:])
+	}
+	return res
+}
+
 func (d *RecordDAWG) valueForIndex(index uint32) [][]uint16 {
 	value := d.BytesDAWG.valueForIndex(index)
 	res := make([][]uint16, len(value))
 	for i, val := range value {
-		res[i] = make([]uint16, d.fmt)
-		err := binary.Read(bytes.NewReader(val), d.order, &res[i])
-		if err != nil {
-			panic(err)
-		}
+		res[i] = d.bytesToUints16(val)
 	}
 
 	return res
@@ -59,11 +65,7 @@ func (d *RecordDAWG) Items(prefix string) []StringUints16 {
 	res := make([]StringUints16, len(items))
 	for i, item := range items {
 		res[i].Key = item.Key
-		res[i].Value = make([]uint16, d.fmt)
-		err := binary.Read(bytes.NewReader(item.Value), d.order, &res[i].Value)
-		if err != nil {
-			panic(err)
-		}
+		res[i].Value = d.bytesToUints16(item.Value)
 	}
 
 	return res
@@ -94,7 +96,7 @@ func (d *RecordDAWG) similarItems(currentPrefix string, key string, index uint32
 	}
 
 	if !exitByBreak {
-		index, ok := d.dct.followBytes(constPayloadSeparator, index)
+		index, ok := d.dct.followChar(constPayloadSeparatorUint, index)
 		if ok {
 			foundKey := currentPrefix + key[startPos:]
 			value := d.valueForIndex(index)
@@ -136,7 +138,7 @@ func (d *RecordDAWG) similarItemsValues(startPos int, key string, index uint32, 
 	}
 
 	if !exitByBreak {
-		index, ok := d.dct.followBytes(constPayloadSeparator, index)
+		index, ok := d.dct.followChar(constPayloadSeparatorUint, index)
 		if ok {
 			value := d.valueForIndex(index)
 			res = append([][][]uint16{value}, res...)

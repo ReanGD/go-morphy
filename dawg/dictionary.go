@@ -13,13 +13,14 @@ type Dictionary struct {
 
 // hasValue - Checks if a given index is related to the end of a key.
 func (d *Dictionary) hasValue(index uint32) bool {
-	return hasLeaf(d.units[index])
+	// return hasLeaf(d.units[index])
+	return (d.units[index] & constHasLeafBit) != 0
 }
 
 // value - Gets a value from a given index.
 func (d *Dictionary) value(index uint32) uint32 {
 	offset := getOffset(d.units[index])
-	valueIndex := (index ^ offset) & constPrecisionMask
+	valueIndex := index ^ offset
 	return getValue(d.units[valueIndex])
 }
 
@@ -56,18 +57,30 @@ func (d *Dictionary) Find(key []byte) (uint32, bool) {
 
 // followChar - Follows a transition.
 func (d *Dictionary) followChar(label uint32, index uint32) (uint32, bool) {
-	offset := getOffset(d.units[index])
-	nextIndex := (index ^ offset ^ label) & constPrecisionMask
-	return nextIndex, getLabel(d.units[nextIndex]) == label
+	// offset := getOffset(d.units[index])
+	// index = index ^ offset ^ label
+	// return index, getLabel(d.units[index]) == label
+	base := d.units[index]
+	index = index ^ ((base >> 10) << ((base & constExtensionBit) >> 6)) ^ label
+	return index, (d.units[index] & constLabelMask) == label
 }
 
 // followBytes - Follows transitions.
 func (d *Dictionary) followBytes(s []byte, index uint32) (uint32, bool) {
-	var ok bool
+	// var ok bool
+	// for _, ch := range s {
+	// 	index, ok = d.followChar(uint32(ch), index)
+	// 	if !ok {
+	// 		return index, ok
+	// 	}
+	// }
+	base := d.units[index]
 	for _, ch := range s {
-		index, ok = d.followChar(uint32(ch), index)
-		if !ok {
-			return index, ok
+		label := uint32(ch)
+		index = index ^ ((base >> 10) << ((base & constExtensionBit) >> 6)) ^ label
+		base = d.units[index]
+		if (base & constLabelMask) != label {
+			return 0, false
 		}
 	}
 

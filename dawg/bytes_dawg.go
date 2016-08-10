@@ -46,7 +46,7 @@ func (d *BytesDAWG) followKey(key []byte) (uint32, bool) {
 	if !ok {
 		return index, ok
 	}
-	return d.dct.followBytes(constPayloadSeparator, index)
+	return d.dct.followChar(constPayloadSeparatorUint, index)
 }
 
 func (d *BytesDAWG) decode(src []byte) []byte {
@@ -70,6 +70,14 @@ func (d *BytesDAWG) valueForIndex(index uint32) [][]byte {
 	return res
 }
 
+func (d *BytesDAWG) stringBySeparator(src []byte) string {
+	pos := bytes.IndexByte(src, constPayloadSeparator[0])
+	if pos == -1 {
+		panic("Separator is not in array")
+	}
+	return string(src[:pos])
+}
+
 // Keys ...
 func (d *BytesDAWG) Keys(prefix string) []string {
 	bPrefix := []byte(prefix)
@@ -82,13 +90,8 @@ func (d *BytesDAWG) Keys(prefix string) []string {
 
 	completer := NewCompleter(d.dct, d.guide)
 	completer.start(index, bPrefix)
-
 	for completer.next() {
-		pos := bytes.IndexByte(completer.key, constPayloadSeparator[0])
-		if pos == -1 {
-			panic("Separator is not in array")
-		}
-		res = append(res, string(completer.key[:pos]))
+		res = append(res, d.stringBySeparator(completer.key))
 	}
 
 	return res
@@ -119,7 +122,7 @@ func (d *BytesDAWG) Items(prefix string) []StringBytes {
 }
 
 func (d *BytesDAWG) hasValue(index uint32) bool {
-	_, ok := d.dct.followBytes(constPayloadSeparator, index)
+	_, ok := d.dct.followChar(constPayloadSeparatorUint, index)
 	return ok
 }
 

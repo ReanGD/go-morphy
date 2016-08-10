@@ -13,6 +13,11 @@ type DAWG struct {
 	dct   *Dictionary
 }
 
+// InitVTable - Init vDAWG.
+func (d *DAWG) InitVTable(vDAWG virtDAWG) {
+	d.vDAWG = vDAWG
+}
+
 // Contains - Exact matching.
 func (d *DAWG) Contains(key string) bool {
 	return d.dct.Contains([]byte(key))

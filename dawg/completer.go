@@ -104,5 +104,5 @@ func (c *Completer) findTerminal(index uint32) bool {
 
 // NewCompleter - constructor for Completer
 func NewCompleter(dic *Dictionary, guide *Guide) *Completer {
-	return &Completer{dic: dic, guide: guide, lastIndex: 0}
+	return &Completer{dic: dic, guide: guide, lastIndex: constRoot}
 }
