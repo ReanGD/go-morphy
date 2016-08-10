@@ -1,3 +1,6 @@
 [submodule "DAWG-Python"]
 	path = DAWG-Python
 	url = https://github.com/pytries/DAWG-Python.git
+[submodule "pymorphy2"]
+	path = pymorphy2
+	url = https://github.com/kmike/pymorphy2.git
