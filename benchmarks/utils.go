@@ -8,7 +8,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/ReanGD/go-morph/dawg"
+	"github.com/ReanGD/go-morphy/dawg"
 )
 
 func fullPath(path string) string {
