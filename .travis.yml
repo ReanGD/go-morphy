@@ -1,0 +1,17 @@
+language: go
+sudo: false
+go:
+  - tip
+os:
+  - linux
+install:
+  - go get github.com/smartystreets/goconvey
+script:
+  - go build -v
+  - ./go.test.sh
+notifications:
+  email:
+    recipients:
+      - reangd@yandex.ru
+    on_success: never
+    on_failure: always
