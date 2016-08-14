@@ -125,12 +125,12 @@ func BenchmarkDAWG(b *testing.B) {
 	intDAWG := loadIntDAWG()
 
 	tests := []testOp{
-		testOp{"get() (hits)", "M ops/sec", 10, 3, 5, getHitBench},
-		testOp{"get() (misses)", "M ops/sec", 100, 5, 5, getMissesBench},
-		testOp{"__contains__ (hits)", "M ops/sec", 10, 3, 5, containsHitBench},
-		testOp{"__contains__ (misses)", "M ops/sec", 10, 3, 5, containsMissesBench},
-		testOp{"items()", " ops/sec", 1, 1, 5, itemsBench},
-		testOp{"keys()", " ops/sec", 1, 1, 5, keysBench},
+		{"get() (hits)", "M ops/sec", 10, 3, 5, getHitBench},
+		{"get() (misses)", "M ops/sec", 100, 5, 5, getMissesBench},
+		{"__contains__ (hits)", "M ops/sec", 10, 3, 5, containsHitBench},
+		{"__contains__ (misses)", "M ops/sec", 10, 3, 5, containsMissesBench},
+		{"items()", " ops/sec", 1, 1, 5, itemsBench},
+		{"keys()", " ops/sec", 1, 1, 5, keysBench},
 	}
 
 	fmt.Printf("\n====== Benchmarks (100k unique unicode words) =======\n\n")

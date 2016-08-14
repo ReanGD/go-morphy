@@ -19,17 +19,17 @@ func TestPrediction(t *testing.T) {
 			prediction []string
 		}
 		suite := []testSuiteData{
-			testSuiteData{"УЖ", []string{}},
-			testSuiteData{"ЕМ", []string{"ЕМ"}},
-			testSuiteData{"ЁМ", []string{}},
-			testSuiteData{"ЁЖ", []string{"ЁЖ"}},
-			testSuiteData{"ЕЖ", []string{"ЁЖ"}},
-			testSuiteData{"ЁЖИК", []string{"ЁЖИК"}},
-			testSuiteData{"ЕЖИКЕ", []string{"ЁЖИКЕ"}},
-			testSuiteData{"ДЕРЕВНЯ", []string{"ДЕРЕВНЯ", "ДЕРЁВНЯ"}},
-			testSuiteData{"ДЕРЁВНЯ", []string{"ДЕРЁВНЯ"}},
-			testSuiteData{"ОЗЕРА", []string{"ОЗЕРА", "ОЗЁРА"}},
-			testSuiteData{"ОЗЕРО", []string{"ОЗЕРО"}},
+			{"УЖ", []string{}},
+			{"ЕМ", []string{"ЕМ"}},
+			{"ЁМ", []string{}},
+			{"ЁЖ", []string{"ЁЖ"}},
+			{"ЕЖ", []string{"ЁЖ"}},
+			{"ЁЖИК", []string{"ЁЖИК"}},
+			{"ЕЖИКЕ", []string{"ЁЖИКЕ"}},
+			{"ДЕРЕВНЯ", []string{"ДЕРЕВНЯ", "ДЕРЁВНЯ"}},
+			{"ДЕРЁВНЯ", []string{"ДЕРЁВНЯ"}},
+			{"ОЗЕРА", []string{"ОЗЕРА", "ОЗЁРА"}},
+			{"ОЗЕРО", []string{"ОЗЕРО"}},
 		}
 		recordDAWG := NewRecordDAWG(1, binary.LittleEndian)
 		err := recordDAWG.Load(testFullPath("small/prediction-record.dawg"))
@@ -58,7 +58,7 @@ func TestPrediction(t *testing.T) {
 				predictionItem := make([]StringUints16Arr, len(d.prediction))
 				for i, word := range d.prediction {
 					lenWord := uint16(utf8.RuneCountInString(word))
-					predictionItem[i] = StringUints16Arr{word, [][]uint16{[]uint16{lenWord}}}
+					predictionItem[i] = StringUints16Arr{word, [][]uint16{{lenWord}}}
 				}
 				So(recordDAWG.SimilarItems(d.word, replaces),
 					ShouldResemble, predictionItem)
@@ -70,7 +70,7 @@ func TestPrediction(t *testing.T) {
 				predictionItem := make([][][]uint16, len(d.prediction))
 				for i, word := range d.prediction {
 					lenWord := uint16(utf8.RuneCountInString(word))
-					predictionItem[i] = [][]uint16{[]uint16{lenWord}}
+					predictionItem[i] = [][]uint16{{lenWord}}
 				}
 				So(recordDAWG.SimilarItemsValues(d.word, replaces),
 					ShouldResemble, predictionItem)

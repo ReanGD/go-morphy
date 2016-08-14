@@ -12,10 +12,10 @@ import (
 func TestBytesDAWG(t *testing.T) {
 	Convey("Suite setup", t, func() {
 		data := []StringBytes{
-			StringBytes{"bar", []byte("data2")},
-			StringBytes{"foo", []byte("data1")},
-			StringBytes{"foo", []byte("data3")},
-			StringBytes{"foobar", []byte("data4")}}
+			{"bar", []byte("data2")},
+			{"foo", []byte("data1")},
+			{"foo", []byte("data3")},
+			{"foobar", []byte("data4")}}
 
 		dawg := NewBytesDAWG()
 		err := dawg.Load(testFullPath("small/bytes.dawg"))
@@ -72,15 +72,15 @@ func TestBytesDAWG(t *testing.T) {
 			So(dawg.Items("xxx"), ShouldResemble, []StringBytes{})
 			So(dawg.Items("fo"), ShouldResemble,
 				[]StringBytes{
-					StringBytes{"foo", []byte("data1")},
-					StringBytes{"foo", []byte("data3")},
-					StringBytes{"foobar", []byte("data4")}})
+					{"foo", []byte("data1")},
+					{"foo", []byte("data3")},
+					{"foobar", []byte("data4")}})
 			So(dawg.Items(""), ShouldResemble, data)
 		})
 
 		Convey("Items completion", func() {
 			So(dawg.Items("foob"), ShouldResemble,
-				[]StringBytes{StringBytes{"foobar", []byte("data4")}})
+				[]StringBytes{{"foobar", []byte("data4")}})
 		})
 
 		Convey("Prefixes", func() {
@@ -111,15 +111,15 @@ func TestRecordDAWG(t *testing.T) {
 		Convey("Getitem", func() {
 			res, ok := dawg.Get("foo")
 			So(ok, ShouldBeTrue)
-			So(res, ShouldResemble, [][]uint16{[]uint16{3, 2, 1}, []uint16{3, 2, 256}})
+			So(res, ShouldResemble, [][]uint16{{3, 2, 1}, {3, 2, 256}})
 
 			res, ok = dawg.Get("bar")
 			So(ok, ShouldBeTrue)
-			So(res, ShouldResemble, [][]uint16{[]uint16{3, 1, 0}})
+			So(res, ShouldResemble, [][]uint16{{3, 1, 0}})
 
 			res, ok = dawg.Get("foobar")
 			So(ok, ShouldBeTrue)
-			So(res, ShouldResemble, [][]uint16{[]uint16{6, 3, 0}})
+			So(res, ShouldResemble, [][]uint16{{6, 3, 0}})
 		})
 
 		Convey("Getitem missing", func() {
@@ -138,10 +138,10 @@ func TestRecordDAWG(t *testing.T) {
 
 		Convey("Record items", func() {
 			data := []StringUints16{
-				StringUints16{"bar", []uint16{3, 1, 0}},
-				StringUints16{"foo", []uint16{3, 2, 1}},
-				StringUints16{"foo", []uint16{3, 2, 256}},
-				StringUints16{"foobar", []uint16{6, 3, 0}}}
+				{"bar", []uint16{3, 1, 0}},
+				{"foo", []uint16{3, 2, 1}},
+				{"foo", []uint16{3, 2, 256}},
+				{"foobar", []uint16{6, 3, 0}}}
 
 			So(dawg.Items(""), ShouldResemble, data)
 		})
