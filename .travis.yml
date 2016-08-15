@@ -5,7 +5,7 @@ go:
 os:
   - linux
 install:
-  - go get github.com/smartystreets/goconvey
+  - go get -u -t -v ./...
 script:
   - go build -v
   - ./.test.sh
