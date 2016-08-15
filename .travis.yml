@@ -8,7 +8,9 @@ install:
   - go get github.com/smartystreets/goconvey
 script:
   - go build -v
-  - ./go.test.sh
+  - ./.test.sh
+after_success:
+  - bash <(curl --request POST "https://goreportcard.com/checks" --data "repo=github.com/ReanGD/go-morphy")
 notifications:
   email:
     recipients:

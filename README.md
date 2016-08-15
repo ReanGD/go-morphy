@@ -1,4 +1,5 @@
 go-morphy
+[![Build Status](https://travis-ci.org/ReanGD/go-morphy.svg?branch=master)](https://travis-ci.org/ReanGD/go-morphy) [![Go Report Card](https://goreportcard.com/badge/github.com/ReanGD/go-morphy)](https://goreportcard.com/report/github.com/ReanGD/go-morphy)
 ===
 
 Порт морфологического анализатора [pymorphy2](https://github.com/kmike/pymorphy2) ([v0.8](https://github.com/kmike/pymorphy2/releases/tag/0.8)) и его составной части [DAWG-Python](https://github.com/pytries/DAWG-Python) ([v0.7.2](https://github.com/pytries/DAWG-Python/releases/tag/0.7.2)) на Golang.
