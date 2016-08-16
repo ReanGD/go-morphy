@@ -10,6 +10,7 @@ script:
   - go build -v
   - ./.test.sh
 after_success:
+  - bash <(curl -s https://codecov.io/bash)
   - bash <(curl --request POST "https://goreportcard.com/checks" --data "repo=github.com/ReanGD/go-morphy")
 notifications:
   email:
