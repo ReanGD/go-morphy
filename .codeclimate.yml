@@ -1,0 +1,17 @@
+engines:
+  markdownlint:
+    enabled: true
+  shellcheck:
+    enabled: true
+  gofmt:
+    enabled: true
+  golint:
+    enabled: true
+  govet:
+    enabled: true
+
+ratings:
+  paths:
+    - "**.go"
+    - "**.md"
+    - "**.sh"
