@@ -1,5 +1,6 @@
 go-morphy
 ===
+
 [![Build Status](https://travis-ci.org/ReanGD/go-morphy.svg?branch=master)](https://travis-ci.org/ReanGD/go-morphy)
  [![codecov](https://codecov.io/gh/ReanGD/go-morphy/branch/master/graph/badge.svg)](https://codecov.io/gh/ReanGD/go-morphy)
  [![Go Report Card](https://goreportcard.com/badge/github.com/ReanGD/go-morphy)](https://goreportcard.com/report/github.com/ReanGD/go-morphy)
@@ -10,18 +11,23 @@ go-morphy
 
 Тесты и бенчмарки
 ---
-Для прохождения требуются тестовые данные из оригинального pymorphy2, поэтому нужно клонировать проект вместе с submodule:
+
+Для прохождения требуются тестовые данные из оригинального pymorphy2,
+поэтому нужно клонировать проект вместе с submodule:
+
 ```
 git clone --recursive https://github.com/ReanGD/go-morphy.git
 ```
 
 - Запуск тестов:
+
 ```
 cd go-morphy
 go test -v ./...
 ```
 
 - Запуск бенчмарков:
+
 ```
 cd go-morphy/benchmarks
 go test -bench=BenchmarkDAWG
