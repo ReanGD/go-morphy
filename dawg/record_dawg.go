@@ -4,19 +4,9 @@ package dawg
 import (
 	"encoding/binary"
 	"unicode/utf8"
+
+	"github.com/ReanGD/go-morphy/std"
 )
-
-// StringUints16 ...
-type StringUints16 struct {
-	Key   string
-	Value []uint16
-}
-
-// StringUints16Arr ...
-type StringUints16Arr struct {
-	Key   string
-	Value [][]uint16
-}
 
 // RecordDAWG ...
 type RecordDAWG struct {
@@ -60,9 +50,9 @@ func (d *RecordDAWG) valueForIndex(index uint32) [][]uint16 {
 }
 
 // Items ...
-func (d *RecordDAWG) Items(prefix string) []StringUints16 {
+func (d *RecordDAWG) Items(prefix string) []std.StrUints16 {
 	items := d.BytesDAWG.Items(prefix)
-	res := make([]StringUints16, len(items))
+	res := make([]std.StrUints16, len(items))
 	for i, item := range items {
 		res[i].Key = item.Key
 		res[i].Value = d.bytesToUints16(item.Value)
@@ -71,8 +61,10 @@ func (d *RecordDAWG) Items(prefix string) []StringUints16 {
 	return res
 }
 
-func (d *RecordDAWG) similarItems(currentPrefix string, key string, index uint32, replaceChars map[rune]rune) []StringUints16Arr {
-	res := []StringUints16Arr{}
+func (d *RecordDAWG) similarItems(currentPrefix string, key string, index uint32,
+	replaceChars map[rune]rune) []std.StrUints16Arr {
+
+	res := []std.StrUints16Arr{}
 	exitByBreak := false
 	startPos := len(currentPrefix)
 
@@ -100,8 +92,8 @@ func (d *RecordDAWG) similarItems(currentPrefix string, key string, index uint32
 		if ok {
 			foundKey := currentPrefix + key[startPos:]
 			value := d.valueForIndex(index)
-			item := StringUints16Arr{foundKey, value}
-			res = append([]StringUints16Arr{item}, res...)
+			item := std.StrUints16Arr{foundKey, value}
+			res = append([]std.StrUints16Arr{item}, res...)
 		}
 	}
 
@@ -111,7 +103,7 @@ func (d *RecordDAWG) similarItems(currentPrefix string, key string, index uint32
 // SimilarItems -
 // Returns a list of (key, value) tuples for all variants of 'key'
 // in this DAWG according to 'replaces'.
-func (d *RecordDAWG) SimilarItems(key string, replaceChars map[rune]rune) []StringUints16Arr {
+func (d *RecordDAWG) SimilarItems(key string, replaceChars map[rune]rune) []std.StrUints16Arr {
 	return d.similarItems("", key, constRoot, replaceChars)
 }
 

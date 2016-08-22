@@ -10,6 +10,7 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/ReanGD/go-morphy/std"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -150,7 +151,7 @@ func TestIntDAWG(t *testing.T) {
 // TestIntCompletionDawg ...
 func TestIntCompletionDawg(t *testing.T) {
 	Convey("Suite setup", t, func() {
-		payload := []StringUint32{{"bar", 5}, {"foo", 1}, {"foobar", 3}}
+		payload := []std.StrUint32{{"bar", 5}, {"foo", 1}, {"foobar", 3}}
 
 		dawg := NewIntCompletionDAWG()
 		err := dawg.Load(testFullPath("small/int_completion_dawg.dawg"))
@@ -184,8 +185,8 @@ func TestIntCompletionDawg(t *testing.T) {
 		})
 
 		Convey("completion items with prefix", func() {
-			So(dawg.Items("foo"), ShouldResemble, []StringUint32{{"foo", 1}, {"foobar", 3}})
-			So(dawg.Items("x"), ShouldResemble, []StringUint32{})
+			So(dawg.Items("foo"), ShouldResemble, []std.StrUint32{{"foo", 1}, {"foobar", 3}})
+			So(dawg.Items("x"), ShouldResemble, []std.StrUint32{})
 		})
 
 		Convey("Invalid file path", func() {

@@ -1,12 +1,7 @@
 package dawg
 
 // status ok
-
-// StringUint32 ...
-type StringUint32 struct {
-	Key   string
-	Value uint32
-}
+import "github.com/ReanGD/go-morphy/std"
 
 // IntCompletionDAWG - Dict-like class based on DAWG.
 // It can store integer values for unicode keys and support key completion.
@@ -21,8 +16,8 @@ func (d *IntCompletionDAWG) Get(key string) (uint32, bool) {
 }
 
 // Items ...
-func (d *IntCompletionDAWG) Items(prefix string) []StringUint32 {
-	res := []StringUint32{}
+func (d *IntCompletionDAWG) Items(prefix string) []std.StrUint32 {
+	res := []std.StrUint32{}
 	bPrefix := []byte(prefix)
 	index := constRoot
 	var ok bool
@@ -37,7 +32,7 @@ func (d *IntCompletionDAWG) Items(prefix string) []StringUint32 {
 	completer.start(index, bPrefix)
 
 	for completer.next() {
-		res = append(res, StringUint32{string(completer.key), completer.value()})
+		res = append(res, std.StrUint32{string(completer.key), completer.value()})
 	}
 
 	return res

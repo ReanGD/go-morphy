@@ -4,17 +4,13 @@ package dawg
 import (
 	"bytes"
 	"encoding/base64"
+
+	"github.com/ReanGD/go-morphy/std"
 )
 
 var (
 	constPayloadSeparator = []byte("\x01")
 )
-
-// StringBytes ...
-type StringBytes struct {
-	Key   string
-	Value []byte
-}
 
 // BytesDAWG - DAWG that is able to transparently store extra binary payload in keys;
 // there may be several payloads for the same key.
@@ -98,8 +94,8 @@ func (d *BytesDAWG) Keys(prefix string) []string {
 }
 
 // Items ...
-func (d *BytesDAWG) Items(prefix string) []StringBytes {
-	res := []StringBytes{}
+func (d *BytesDAWG) Items(prefix string) []std.StrBytes {
+	res := []std.StrBytes{}
 	bPrefix := []byte(prefix)
 	index := constRoot
 	var ok bool
@@ -115,7 +111,7 @@ func (d *BytesDAWG) Items(prefix string) []StringBytes {
 
 	for completer.next() {
 		parts := bytes.Split(completer.key, constPayloadSeparator)
-		res = append(res, StringBytes{string(parts[0]), d.decode(parts[1])})
+		res = append(res, std.StrBytes{string(parts[0]), d.decode(parts[1])})
 	}
 
 	return res

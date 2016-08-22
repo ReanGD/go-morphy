@@ -5,13 +5,14 @@ import (
 	"encoding/binary"
 	"testing"
 
+	"github.com/ReanGD/go-morphy/std"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 // TestBytesDAWG ...
 func TestBytesDAWG(t *testing.T) {
 	Convey("Suite setup", t, func() {
-		data := []StringBytes{
+		data := []std.StrBytes{
 			{"bar", []byte("data2")},
 			{"foo", []byte("data1")},
 			{"foo", []byte("data3")},
@@ -69,9 +70,9 @@ func TestBytesDAWG(t *testing.T) {
 		})
 
 		Convey("Items", func() {
-			So(dawg.Items("xxx"), ShouldResemble, []StringBytes{})
+			So(dawg.Items("xxx"), ShouldResemble, []std.StrBytes{})
 			So(dawg.Items("fo"), ShouldResemble,
-				[]StringBytes{
+				[]std.StrBytes{
 					{"foo", []byte("data1")},
 					{"foo", []byte("data3")},
 					{"foobar", []byte("data4")}})
@@ -80,7 +81,7 @@ func TestBytesDAWG(t *testing.T) {
 
 		Convey("Items completion", func() {
 			So(dawg.Items("foob"), ShouldResemble,
-				[]StringBytes{{"foobar", []byte("data4")}})
+				[]std.StrBytes{{"foobar", []byte("data4")}})
 		})
 
 		Convey("Prefixes", func() {
@@ -137,7 +138,7 @@ func TestRecordDAWG(t *testing.T) {
 		})
 
 		Convey("Record items", func() {
-			data := []StringUints16{
+			data := []std.StrUints16{
 				{"bar", []uint16{3, 1, 0}},
 				{"foo", []uint16{3, 2, 1}},
 				{"foo", []uint16{3, 2, 256}},

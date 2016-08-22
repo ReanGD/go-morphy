@@ -6,6 +6,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
+	"github.com/ReanGD/go-morphy/std"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -14,11 +15,7 @@ func TestPrediction(t *testing.T) {
 	Convey("Suite setup", t, func() {
 		replaces := map[rune]rune{'Е': 'Ё'}
 
-		type testSuiteData struct {
-			word       string
-			prediction []string
-		}
-		suite := []testSuiteData{
+		suite := []std.StrStrs{
 			{"УЖ", []string{}},
 			{"ЕМ", []string{"ЕМ"}},
 			{"ЁМ", []string{}},
@@ -41,38 +38,38 @@ func TestPrediction(t *testing.T) {
 
 		Convey("dawg prediction", func() {
 			for _, d := range suite {
-				So(dawg.SimilarKeys(d.word, replaces),
-					ShouldResemble, d.prediction)
+				So(dawg.SimilarKeys(d.Key, replaces),
+					ShouldResemble, d.Value)
 			}
 		})
 
 		Convey("record dawg prediction", func() {
 			for _, d := range suite {
-				So(recordDAWG.SimilarKeys(d.word, replaces),
-					ShouldResemble, d.prediction)
+				So(recordDAWG.SimilarKeys(d.Key, replaces),
+					ShouldResemble, d.Value)
 			}
 		})
 
 		Convey("record dawg items", func() {
 			for _, d := range suite {
-				predictionItem := make([]StringUints16Arr, len(d.prediction))
-				for i, word := range d.prediction {
+				predictionItem := make([]std.StrUints16Arr, len(d.Value))
+				for i, word := range d.Value {
 					lenWord := uint16(utf8.RuneCountInString(word))
-					predictionItem[i] = StringUints16Arr{word, [][]uint16{{lenWord}}}
+					predictionItem[i] = std.StrUints16Arr{word, [][]uint16{{lenWord}}}
 				}
-				So(recordDAWG.SimilarItems(d.word, replaces),
+				So(recordDAWG.SimilarItems(d.Key, replaces),
 					ShouldResemble, predictionItem)
 			}
 		})
 
 		Convey("record dawg items values", func() {
 			for _, d := range suite {
-				predictionItem := make([][][]uint16, len(d.prediction))
-				for i, word := range d.prediction {
+				predictionItem := make([][][]uint16, len(d.Value))
+				for i, word := range d.Value {
 					lenWord := uint16(utf8.RuneCountInString(word))
 					predictionItem[i] = [][]uint16{{lenWord}}
 				}
-				So(recordDAWG.SimilarItemsValues(d.word, replaces),
+				So(recordDAWG.SimilarItemsValues(d.Key, replaces),
 					ShouldResemble, predictionItem)
 			}
 		})
