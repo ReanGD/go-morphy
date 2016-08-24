@@ -105,10 +105,14 @@ func (d *DAWG) Prefixes(key string) []string {
 	return res
 }
 
+func (d *DAWG) initDAWG() {
+}
+
 // NewDAWG - constructor for DAWG
 func NewDAWG() *DAWG {
-	dawg := &DAWG{dct: nil}
+	dawg := &DAWG{}
 	dawg.vDAWG = dawg
+	dawg.initDAWG()
 
 	return dawg
 }

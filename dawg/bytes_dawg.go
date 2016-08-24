@@ -17,7 +17,7 @@ var (
 // In other words, this class implements read-only DAWG-based
 // {unicode -> list of bytes objects} mapping.
 type BytesDAWG struct {
-	*CompletionDAWG
+	CompletionDAWG
 }
 
 // Contains ...
@@ -111,7 +111,7 @@ func (d *BytesDAWG) Items(prefix string) []std.StrBytes {
 
 	for completer.next() {
 		parts := bytes.Split(completer.key, constPayloadSeparator)
-		res = append(res, std.StrBytes{string(parts[0]), d.decode(parts[1])})
+		res = append(res, std.StrBytes{Key: string(parts[0]), Value: d.decode(parts[1])})
 	}
 
 	return res
@@ -122,10 +122,15 @@ func (d *BytesDAWG) hasValue(index uint32) bool {
 	return ok
 }
 
+func (d *BytesDAWG) initBytesDAWG() {
+	d.initCompletionDAWG()
+}
+
 // NewBytesDAWG - constructor for BytesDAWG
 func NewBytesDAWG() *BytesDAWG {
-	dawg := &BytesDAWG{CompletionDAWG: NewCompletionDAWG()}
+	dawg := &BytesDAWG{}
 	dawg.vDAWG = dawg
+	dawg.initBytesDAWG()
 
 	return dawg
 }

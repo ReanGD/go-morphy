@@ -5,7 +5,7 @@ import "os"
 
 // CompletionDAWG - DAWG with key completion support.
 type CompletionDAWG struct {
-	*DAWG
+	DAWG
 	guide *Guide
 }
 
@@ -51,10 +51,15 @@ func (d *CompletionDAWG) Load(path string) error {
 	return err
 }
 
+func (d *CompletionDAWG) initCompletionDAWG() {
+	d.initDAWG()
+}
+
 // NewCompletionDAWG - constructor for CompletionDAWG
 func NewCompletionDAWG() *CompletionDAWG {
-	dawg := &CompletionDAWG{DAWG: NewDAWG(), guide: nil}
+	dawg := &CompletionDAWG{}
 	dawg.vDAWG = dawg
+	dawg.initCompletionDAWG()
 
 	return dawg
 }

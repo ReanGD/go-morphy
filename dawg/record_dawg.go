@@ -10,7 +10,7 @@ import (
 
 // RecordDAWG ...
 type RecordDAWG struct {
-	*BytesDAWG
+	BytesDAWG
 	// "HH" == 2, "3H" == 3
 	fmt uint8
 	// ">" - binary.BigEndian, "<" - binary.LittleEndian (default)
@@ -147,10 +147,17 @@ func (d *RecordDAWG) SimilarItemsValues(key string, replaceChars map[rune]rune) 
 	return d.similarItemsValues(0, key, constRoot, replaceChars)
 }
 
+func (d *RecordDAWG) initRecordDAWG(fmt uint8, order binary.ByteOrder) {
+	d.initBytesDAWG()
+	d.fmt = fmt
+	d.order = order
+}
+
 // NewRecordDAWG - constructor for RecordDAWG
 func NewRecordDAWG(fmt uint8, order binary.ByteOrder) *RecordDAWG {
-	dawg := &RecordDAWG{BytesDAWG: NewBytesDAWG(), fmt: fmt, order: order}
+	dawg := &RecordDAWG{}
 	dawg.vDAWG = dawg
+	dawg.initRecordDAWG(fmt, order)
 
 	return dawg
 }

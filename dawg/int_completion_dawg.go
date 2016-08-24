@@ -6,8 +6,8 @@ import "github.com/ReanGD/go-morphy/std"
 // IntCompletionDAWG - Dict-like class based on DAWG.
 // It can store integer values for unicode keys and support key completion.
 type IntCompletionDAWG struct {
-	*DAWG
-	*CompletionDAWG
+	DAWG
+	CompletionDAWG
 }
 
 // Get - Return value for the given key.
@@ -32,7 +32,7 @@ func (d *IntCompletionDAWG) Items(prefix string) []std.StrUint32 {
 	completer.start(index, bPrefix)
 
 	for completer.next() {
-		res = append(res, std.StrUint32{string(completer.key), completer.value()})
+		res = append(res, std.StrUint32{Key: string(completer.key), Value: completer.value()})
 	}
 
 	return res
@@ -49,11 +49,17 @@ func (d *IntCompletionDAWG) Load(path string) error {
 	return nil
 }
 
+func (d *IntCompletionDAWG) initIntCompletionDAWG() {
+	d.initDAWG()
+	d.initCompletionDAWG()
+}
+
 // NewIntCompletionDAWG - constructor for IntCompletionDAWG
 func NewIntCompletionDAWG() *IntCompletionDAWG {
-	dawg := &IntCompletionDAWG{DAWG: NewDAWG(), CompletionDAWG: NewCompletionDAWG()}
+	dawg := &IntCompletionDAWG{}
 	dawg.DAWG.vDAWG = dawg
 	dawg.CompletionDAWG.vDAWG = dawg
+	dawg.initIntCompletionDAWG()
 
 	return dawg
 }
