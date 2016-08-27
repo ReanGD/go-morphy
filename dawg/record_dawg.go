@@ -92,7 +92,7 @@ func (d *RecordDAWG) similarItems(currentPrefix string, key string, index uint32
 		if ok {
 			foundKey := currentPrefix + key[startPos:]
 			value := d.valueForIndex(index)
-			item := std.StrUints16Arr{foundKey, value}
+			item := std.StrUints16Arr{Key: foundKey, Value: value}
 			res = append([]std.StrUints16Arr{item}, res...)
 		}
 	}
@@ -109,7 +109,6 @@ func (d *RecordDAWG) SimilarItems(key string, replaceChars map[rune]rune) []std.
 
 func (d *RecordDAWG) similarItemsValues(startPos int, key string, index uint32, replaceChars map[rune]rune) [][][]uint16 {
 	res := [][][]uint16{}
-	exitByBreak := false
 
 	for curPos, bStep := range key[startPos:] {
 		ReplaceChar, ok := replaceChars[bStep]
@@ -124,17 +123,14 @@ func (d *RecordDAWG) similarItemsValues(startPos int, key string, index uint32, 
 
 		index, ok = d.dct.followBytes([]byte(string(bStep)), index)
 		if !ok {
-			exitByBreak = true
-			break
+			return res
 		}
 	}
 
-	if !exitByBreak {
-		index, ok := d.dct.followChar(constPayloadSeparatorUint, index)
-		if ok {
-			value := d.valueForIndex(index)
-			res = append([][][]uint16{value}, res...)
-		}
+	index, ok := d.dct.followChar(constPayloadSeparatorUint, index)
+	if ok {
+		value := d.valueForIndex(index)
+		res = append([][][]uint16{value}, res...)
 	}
 
 	return res
