@@ -9,6 +9,8 @@ go-morphy
 
 Порт морфологического анализатора [pymorphy2](https://github.com/kmike/pymorphy2) ([v0.8](https://github.com/kmike/pymorphy2/releases/tag/0.8)) и его составной части [DAWG-Python](https://github.com/pytries/DAWG-Python) ([v0.7.2](https://github.com/pytries/DAWG-Python/releases/tag/0.7.2)) на Golang.
 
+**На данный момент портирован только DAWG-Python, на сам pymorphy2, пока нет времени.**
+
 Тесты и бенчмарки
 ---
 
